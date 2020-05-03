@@ -6,7 +6,7 @@ import json
 from datetime import datetime
 
 
-# generates a paswords for every combinatin of a number and letter
+# generates a passwords for every combination of a number and letter
 from idlelib.configdialog import is_int
 
 
@@ -53,13 +53,27 @@ def dict_crack(passwords):
 
                 yield ''.join(new_password)
 
+def send_data(str):
+    # converting to bytes
+    message = str.encode()
+
+    # sending through socket
+    client_socket.send(message)
+
+    # receiving the response
+    r = client_socket.recv(1024)
+
+    # decoding from bytes to string
+    r = r.decode()
+    return r
+
 
 list_of_logins = load_from_file("/Users/andreea.moraru/Documents/projects/Password Hacker/"
                                 "Password Hacker/task/hacking/logins.txt")
 list_of_passwords = load_from_file("/Users/andreea.moraru/Documents/projects/Password"
                                    " Hacker/Password Hacker/task/hacking/passwords.txt")
 
-filtered_list = list()
+
 response = ''
 
 wrong_pass = {
@@ -97,17 +111,8 @@ for guess_login in list_of_logins:
 
     json_str = json.dumps(data)
     # print(json_str)
-    # converting to bytes
-    message = json_str.encode()
 
-    # sending through socket
-    client_socket.send(message)
-
-    # receiving the response
-    response = client_socket.recv(1024)
-
-    # decoding from bytes to string
-    response = response.decode()
+    response = send_data(json_str)
 
     json_response = json.loads(response)
 
@@ -126,17 +131,9 @@ if login == '':
 
         json_str = json.dumps(data)
         # print(json_str)
-        # converting to bytes
-        message = json_str.encode()
-
-        # sending through socket
-        client_socket.send(message)
-
-        # receiving the response
-        response = client_socket.recv(1024)
 
         # decoding from bytes to string
-        response = response.decode()
+        response = send_data(json_str)
 
         json_response = json.loads(response)
         # print(json_response)
@@ -161,8 +158,8 @@ for i in range(20):
         json_str = json.dumps(data)
         # print( data)
         # converting to bytes
-        message = json_str.encode()
         start = datetime.now()
+        message = json_str.encode()
 
         # sending through socket
         client_socket.send(message)
