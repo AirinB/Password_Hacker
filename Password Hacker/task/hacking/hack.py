@@ -179,7 +179,8 @@ for i in range(20):
         # print(difference)
         # 0.002577 0.102001 0.001897 0.002455
 
-        # ‘exception’  if the letter match the fist letter of password
+        # if guess the begging of the password that the delay
+        # will be bigger because of the exception
         if difference >= 0.00955:
             password_found += ch
             # print("Found the next letter of the password:", password_found)
